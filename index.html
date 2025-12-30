@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chronicle Daily - Breaking News & Global Coverage</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* === GLOBAL STYLES === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #0a0e17;
+            color: #ffffff;
+            line-height: 1.6;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        /* Prevent horizontal scroll */
+        body, html {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        /* === SECTION BASE === */
+        .section {
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 100px 5%;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* === ANIMATED BACKGROUNDS === */
+        .animated-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        .bg-grid {
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        .bg-particles {
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 102, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 0, 102, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(102, 0, 255, 0.06) 0%, transparent 50%);
+            animation: particleFloat 30s ease-in-out infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 50px 50px; }
+        }
+
+        @keyframes particleFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -20px) scale(1.05); }
+            66% { transform: translate(-20px, 30px) scale(0.95); }
+        }
+
+        /* === ANIMATED TEXT CLASSES === */
+        .animate-text {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .animate-text.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .animate-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .animate-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .animate-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .animate-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .animate-scale {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .animate-scale.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* === TYPOGRAPHY === */
+        .section-tag {
+            display: inline-block;
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #00a8ff;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .section-heading {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .section-heading span {
+            background: linear-gradient(135deg, #00a8ff, #9d4edd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-desc {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            opacity: 0.9;
+        }
+
+        /* === BUTTON STYLES === */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 40px;
+            background: linear-gradient(135deg, #00a8ff, #9d4edd);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            margin: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 168, 255, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #00a8ff;
+            color: #00a8ff;
+        }
+
+        .btn-outline:hover {
+            background: rgba(0, 168, 255, 0.1);
+        }
+
+        /* Shake animation for errors */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        /* === SECTION 1: HERO === */
+        .hero-section {
+            background: linear-gradient(135deg, #0a0e17 0%, #1a1f37 100%);
+            background: url();
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-headline {
+            font-size: clamp(3rem, 7vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1;
+            margin: 20px 0;
+            background: linear-gradient(to right, #ffffff 30%, #00a8ff 70%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 60px;
+            flex-wrap: wrap;
+        }
+
+        .stat-box {
+            text-align: center;
+            min-width: 150px;
+        }
+
+        .stat-number {
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #00a8ff, #9d4edd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: block;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 10px;
+            opacity: 0.8;
+        }
+
+        /* === SECTION 2: BREAKING NEWS === */
+        .breaking-section {
+            background: linear-gradient(135deg, #1a1f37 0%, #0f1529 100%);
+        }
+
+        .breaking-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff4757, #ff3838);
+            color: white;
+            padding: 10px 30px;
+            border-radius: 30px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .news-ticker {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px auto;
+            max-width: 900px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .ticker-item {
+            margin: 15px 0;
+            padding: 15px;
+            border-left: 3px solid #00a8ff;
+            text-align: left;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .ticker-item:hover {
+            transform: translateX(10px);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* === SECTION 3: NEWS CATEGORIES === */
+        .categories-section {
+            background: linear-gradient(135deg, #0f1529 0%, #1a1f37 100%);
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .category-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 40px 30px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-card:hover {
+            transform: translateY(-15px);
+            border-color: rgba(0, 168, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent, rgba(0, 168, 255, 0.1));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .category-card:hover::before {
+            opacity: 1;
+        }
+
+        .category-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: inline-block;
+            transition: transform 0.4s ease;
+        }
+
+        .category-card:hover .category-icon {
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        /* === SECTION 4: FEATURED STORIES === */
+        .featured-section {
+            background: linear-gradient(135deg, #0a0e17 0%, #13182d 100%);
+        }
+
+        .featured-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+           
+        }
+
+        .featured-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s ease;
+        }
+
+        .featured-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(0, 168, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .featured-image {
+            height: 200px;
+            width: 100%;
+            background: linear-gradient(45deg, #00a8ff, #9d4edd);
+            position: relative;
+            overflow: hidden;
+             background-image: url('event1.webp');
+        }
+
+        .featured-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: shine 2s ease-in-out infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .featured-content {
+            padding: 30px;
+        }
+
+        /* === SECTION 5: EDITORIAL === */
+        .editorial-section {
+            background: linear-gradient(135deg, #1a1f37 0%, #0f1529 100%);
+        }
+
+        .editorial-content {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .editor-quote {
+            font-size: 1.5rem;
+            line-height: 1.8;
+            margin: 30px 0;
+            font-style: italic;
+            position: relative;
+            padding: 0 40px;
+        }
+
+        .editor-quote::before,
+        .editor-quote::after {
+            content: '"';
+            position: absolute;
+            font-size: 4rem;
+            color: rgba(0, 168, 255, 0.3);
+        }
+
+        .editor-quote::before {
+            top: -20px;
+            left: 0;
+        }
+
+        .editor-quote::after {
+            bottom: -40px;
+            right: 0;
+        }
+
+        /* === SECTION 6: TRENDING NOW === */
+        .trending-section {
+            background: linear-gradient(135deg, #0a0e17 0%, #13182d 100%);
+        }
+
+        .trending-list {
+            max-width: 800px;
+            margin: 50px auto 0;
+        }
+
+        .trending-item {
+            display: flex;
+            align-items: center;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            margin: 15px 0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .trending-item:hover {
+            transform: translateX(10px);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(0, 168, 255, 0.2);
+        }
+
+        .trending-rank {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #00a8ff;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .trending-content {
+            flex: 1;
+            text-align: left;
+        }
+
+        /* === SECTION 7: NEWSLETTER (WITH VALIDATION) === */
+        .newsletter-section {
+            background: linear-gradient(135deg, #1a1f37 0%, #0f1529 100%);
+        }
+
+        .newsletter-box {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .newsletter-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .newsletter-input:focus {
+            outline: none;
+            border-color: #00a8ff;
+            box-shadow: 0 0 0 3px rgba(0, 168, 255, 0.1);
+        }
+
+        .newsletter-input.error {
+            border-color: #ff4757;
+        }
+
+        .newsletter-input.success {
+            border-color: #00a8ff;
+        }
+
+        .newsletter-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 40px;
+            background: linear-gradient(135deg, #00a8ff, #9d4edd);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .newsletter-btn:hover:not(:disabled) {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 168, 255, 0.3);
+        }
+
+        .newsletter-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .newsletter-btn.loading {
+            background: linear-gradient(135deg, #00a8ff, #00a8ff);
+        }
+
+        .validation-message {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            height: 20px;
+        }
+
+        .error-message {
+            color: #ff4757;
+        }
+
+        .success-message {
+            color: #00a8ff;
+        }
+
+        /* === SECTION 8: CONTACT === */
+        .contact-section {
+            background: linear-gradient(135deg, #0a0e17 0%, #1a1f37 100%);
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .contact-item {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 168, 255, 0.3);
+        }
+
+        /* === RESPONSIVE DESIGN === */
+        @media (max-width: 1024px) {
+            .section {
+                padding: 80px 5%;
+            }
+            
+            .hero-stats {
+                gap: 30px;
+            }
+            
+            .stat-box {
+                min-width: 130px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .section {
+                padding: 60px 5%;
+                min-height: auto;
+            }
+            
+            .hero-headline {
+                font-size: clamp(2.5rem, 8vw, 4rem);
+            }
+            
+            .section-heading {
+                font-size: clamp(2rem, 5vw, 3rem);
+            }
+            
+            .categories-grid,
+            .featured-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-stats {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .newsletter-form {
+                flex-direction: column;
+            }
+            
+            .newsletter-input {
+                min-width: 100%;
+            }
+            
+            .editorial-content {
+                padding: 30px;
+            }
+            
+            .trending-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .trending-content {
+                text-align: center;
+                margin-top: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .section {
+                padding: 40px 5%;
+            }
+            
+            .btn, .newsletter-btn {
+                padding: 14px 30px;
+                font-size: 0.9rem;
+            }
+            
+            .newsletter-box {
+                padding: 30px 20px;
+            }
+            
+            .contact-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-stats {
+                margin-top: 40px;
+            }
+            
+            .stat-number {
+                font-size: 2.2rem;
+            }
+        }
+
+        /* === LOADER === */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0e17;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loader-content {
+            text-align: center;
+        }
+
+        .loader-spinner {
+            width: 80px;
+            height: 80px;
+            border: 3px solid rgba(0, 168, 255, 0.1);
+            border-top-color: #00a8ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- LOADER -->
+    <div id="loader">
+        <div class="loader-content">
+            <div class="loader-spinner"></div>
+            <div style="font-size: 1.2rem; margin-top: 20px;">Loading Chronicle Daily...</div>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+<div id="header-placeholder"></div>
+
+    <!-- SECTION 1: HERO -->
+    <section class="hero-section section" style="background: url('cricket1.webp') center/cover no-repeat">
+        <div class="animated-bg bg-grid bg-particles"></div>
+        <div class="container">
+            <div class="hero-content">
+                <span class="section-tag animate-text">Breaking News Network</span>
+                <h1 class="hero-headline animate-text">
+                    CHRONICLE<br>DAILY
+                </h1>
+                <p class="section-desc animate-text">
+                    Your trusted source for global news, investigative journalism, 
+                    and real-time updates from around the world.
+                </p>
+                <div style="margin-top: 40px;">
+                    <a href="404.html" class="btn animate-text">
+                        Read Latest News <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <a href="404.html" class="btn btn-outline animate-text">
+                        <i class="fas fa-play-circle"></i> Watch Report
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-box animate-left">
+                        <span class="stat-number">500K+</span>
+                        <div class="stat-label">Daily Readers</div>
+                    </div>
+                    <div class="stat-box animate-text">
+                        <span class="stat-number">150+</span>
+                        <div class="stat-label">Countries</div>
+                    </div>
+                    <div class="stat-box animate-right">
+                        <span class="stat-number">24/7</span>
+                        <div class="stat-label">Live Coverage</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: BREAKING NEWS -->
+    <section class="breaking-section section">
+        <div class="animated-bg bg-grid"></div>
+        <div class="container">
+            <span class="breaking-badge animate-text">
+                <i class="fas fa-bolt"></i> BREAKING NOW
+            </span>
+            <h2 class="section-heading animate-text">
+                Latest<br><span>Breaking News</span>
+            </h2>
+            <p class="section-desc animate-text">
+                Stay updated with the most important developments happening right now
+            </p>
+            
+            <div class="news-ticker animate-scale">
+                <div class="ticker-item animate-left">
+                    <h3 style="margin-bottom: 5px;">Global Climate Summit Reaches Historic Agreement</h3>
+                    <p style="opacity: 0.8; font-size: 0.9rem;">World leaders unite on landmark environmental pact • 2 hours ago</p>
+                </div>
+                <div class="ticker-item animate-text">
+                    <h3 style="margin-bottom: 5px;">Tech Giant Announces Breakthrough in Quantum Computing</h3>
+                    <p style="opacity: 0.8; font-size: 0.9rem;">Revolutionary processor promises 1000x speed increase • 4 hours ago</p>
+                </div>
+                <div class="ticker-item animate-right">
+                    <h3 style="margin-bottom: 5px;">Stock Markets Surge to Record Highs</h3>
+                    <p style="opacity: 0.8; font-size: 0.9rem;">Global indices show strongest growth in a decade • 6 hours ago</p>
+                </div>
+            </div>
+            
+            <a href="404.html" class="btn animate-text" style="margin-top: 40px;">
+                View All Breaking News <i class="fas fa-external-link-alt"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- SECTION 3: NEWS CATEGORIES -->
+    <section class="categories-section section">
+        <div class="animated-bg bg-particles"></div>
+        <div class="container">
+            <span class="section-tag animate-text">Explore Topics</span>
+            <h2 class="section-heading animate-text">
+                News<br><span>Categories</span>
+            </h2>
+            <p class="section-desc animate-text">
+                Dive deep into specialized coverage across all major topics
+            </p>
+            
+            <div class="categories-grid">
+                <div class="category-card animate-left">
+                    <div class="category-icon">🏛️</div>
+                    <h3 style="margin-bottom: 10px;">Politics</h3>
+                    <p style="opacity: 0.8;">Government, elections, policy analysis</p>
+                    <a href="404.html" class="btn" style="margin-top: 20px; padding: 10px 25px; font-size: 0.9rem;">
+                        Explore <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                
+                <div class="category-card animate-text">
+                    <div class="category-icon">💼</div>
+                    <h3 style="margin-bottom: 10px;">Business</h3>
+                    <p style="opacity: 0.8;">Markets, economy, and corporate news</p>
+                    <a href="404.html" class="btn" style="margin-top: 20px; padding: 10px 25px; font-size: 0.9rem;">
+                        Explore <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                
+                <div class="category-card animate-right">
+                    <div class="category-icon">🔬</div>
+                    <h3 style="margin-bottom: 10px;">Technology</h3>
+                    <p style="opacity: 0.8;">Innovation, startups, and digital trends</p>
+                    <a href="404.html" class="btn" style="margin-top: 20px; padding: 10px 25px; font-size: 0.9rem;">
+                        Explore <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: FEATURED STORIES -->
+    <section class="featured-section section">
+        <div class="animated-bg bg-grid"></div>
+        <div class="container">
+            <span class="section-tag animate-text">Exclusive Content</span>
+            <h2 class="section-heading animate-text">
+                Featured<br><span>Stories</span>
+            </h2>
+            <p class="section-desc animate-text">
+                In-depth reporting and investigative journalism
+            </p>
+            
+            <div class="featured-grid">
+                <div class="featured-card animate-left">
+                    <div class="featured-image"></div>
+                    <div class="featured-content">
+                        <h3 style="margin-bottom: 10px;">The Future of Renewable Energy</h3>
+                        <p style="opacity: 0.8; margin-bottom: 20px;">How solar and wind are transforming global power grids</p>
+                        <a href="404.html" class="btn" style="padding: 10px 25px; font-size: 0.9rem;">
+                            Read Story <i class="fas fa-book-open"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="featured-card animate-text">
+                    <div class="featured-image"></div>
+                    <div class="featured-content">
+                        <h3 style="margin-bottom: 10px;">AI Ethics and Society</h3>
+                        <p style="opacity: 0.8; margin-bottom: 20px;">The moral implications of artificial intelligence</p>
+                        <a href="404.html" class="btn" style="padding: 10px 25px; font-size: 0.9rem;">
+                            Read Story <i class="fas fa-book-open"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: EDITORIAL -->
+    <section class="editorial-section section">
+        <div class="animated-bg bg-particles"></div>
+        <div class="container">
+            <div class="editorial-content animate-scale">
+                <span class="section-tag animate-text">From Our Editor</span>
+                <h2 class="section-heading animate-text">
+                    Editorial<br><span>Perspective</span>
+                </h2>
+                <blockquote class="editor-quote animate-text">
+                    "In an era of information overload, quality journalism has never been more crucial. 
+                    Our commitment is to deliver not just news, but understanding—providing context, 
+                    analysis, and truth in every story we publish."
+                </blockquote>
+                <div style="margin-top: 40px;">
+                    <div style="font-weight: 600; margin-bottom: 5px;">Sarah Johnson</div>
+                    <div style="opacity: 0.7; font-size: 0.9rem;">Editor-in-Chief, Chronicle Daily</div>
+                </div>
+                <a href="404.html" class="btn animate-text" style="margin-top: 30px;">
+                    Meet Our Team <i class="fas fa-users"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 6: TRENDING NOW -->
+    <section class="trending-section section">
+        <div class="animated-bg bg-grid"></div>
+        <div class="container">
+            <span class="section-tag animate-text">Most Popular</span>
+            <h2 class="section-heading animate-text">
+                Trending<br><span>Now</span>
+            </h2>
+            <p class="section-desc animate-text">
+                What our readers are discussing right now
+            </p>
+            
+            <div class="trending-list">
+                <div class="trending-item animate-left">
+                    <div class="trending-rank">1</div>
+                    <div class="trending-content">
+                        <h3 style="margin-bottom: 5px;">Space Exploration Breakthrough</h3>
+                        <p style="opacity: 0.8; font-size: 0.9rem;">New Mars mission discovers evidence of ancient water • 850K views</p>
+                    </div>
+                </div>
+                
+                <div class="trending-item animate-text">
+                    <div class="trending-rank">2</div>
+                    <div class="trending-content">
+                        <h3 style="margin-bottom: 5px;">Healthcare Reform Debate</h3>
+                        <p style="opacity: 0.8; font-size: 0.9rem;">Proposed legislation sparks nationwide discussion • 720K views</p>
+                    </div>
+                </div>
+                
+                <div class="trending-item animate-right">
+                    <div class="trending-rank">3</div>
+                    <div class="trending-content">
+                        <h3 style="margin-bottom: 5px;">Sustainable Fashion Movement</h3>
+                        <p style="opacity: 0.8; font-size: 0.9rem;">How consumers are driving change in the industry • 650K views</p>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="404.html" class="btn animate-text" style="margin-top: 40px;">
+                View All Trending <i class="fas fa-chart-line"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- SECTION 7: NEWSLETTER WITH VALIDATION -->
+    <section class="newsletter-section section">
+        <div class="animated-bg bg-particles"></div>
+        <div class="container">
+            <div class="newsletter-box animate-scale">
+                <span class="section-tag animate-text">Stay Informed</span>
+                <h2 class="section-heading animate-text">
+                    Daily<br><span>Newsletter</span>
+                </h2>
+                <p class="section-desc animate-text">
+                    Get the most important stories delivered directly to your inbox every morning
+                </p>
+                
+                <form class="newsletter-form" id="newsletterForm">
+                    <input type="email" class="newsletter-input animate-left" 
+                           id="emailInput" placeholder="Enter your email address" required>
+                    <button type="submit" class="newsletter-btn animate-right" id="subscribeBtn">
+                        Subscribe <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+                
+                <div class="validation-message error-message" id="errorMessage">
+                    Please enter a valid email address
+                </div>
+                
+                <div class="validation-message success-message" id="successMessage">
+                    Thank you! Redirecting...
+                </div>
+                
+                <p style="margin-top: 20px; font-size: 0.9rem; opacity: 0.7; text-align: center;">
+                    Join 250,000+ informed readers. We respect your privacy.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 8: CONTACT -->
+    <section class="contact-section section">
+        <div class="animated-bg bg-grid"></div>
+        <div class="container">
+            <span class="section-tag animate-text">Get In Touch</span>
+            <h2 class="section-heading animate-text">
+                Contact<br><span>Us</span>
+            </h2>
+            <p class="section-desc animate-text">
+                We're here to help with any questions or feedback
+            </p>
+            
+            <div class="contact-info">
+                <div class="contact-item animate-left">
+                    <div style="font-size: 2rem; margin-bottom: 15px; color: #00a8ff;">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h3 style="margin-bottom: 10px;">Email Us</h3>
+                    <p style="opacity: 0.8;">editorial@chronicledaily.com</p>
+                    <a href="404.html" class="btn" style="margin-top: 20px; padding: 10px 25px; font-size: 0.9rem;">
+                        Send Email <i class="fas fa-paper-plane"></i>
+                    </a>
+                </div>
+                
+                <div class="contact-item animate-text">
+                    <div style="font-size: 2rem; margin-bottom: 15px; color: #00a8ff;">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <h3 style="margin-bottom: 10px;">Call Us</h3>
+                    <p style="opacity: 0.8;">+1 (555) 123-4567</p>
+                    <a href="404.html" class="btn" style="margin-top: 20px; padding: 10px 25px; font-size: 0.9rem;">
+                        Call Now <i class="fas fa-phone"></i>
+                    </a>
+                </div>
+                
+                <div class="contact-item animate-right">
+                    <div style="font-size: 2rem; margin-bottom: 15px; color: #00a8ff;">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3 style="margin-bottom: 10px;">Visit Us</h3>
+                    <p style="opacity: 0.8;">123 Media Street, News City</p>
+                    <a href="404.html" class="btn" style="margin-top: 20px; padding: 10px 25px; font-size: 0.9rem;">
+                        Get Directions <i class="fas fa-directions"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+<div id="footer-placeholder"></div>
+
+    <script>
+
+        // Load header
+  fetch('header.html')
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('header-placeholder').innerHTML = data;
+
+      // Header Interactions
+      const menuBtn = document.querySelector('.menu-btn');
+      const homeArrow = document.querySelector('.home-link span');
+
+      menuBtn?.addEventListener('click', () => {
+        document.getElementById('navBar').classList.toggle('active');
+      });
+
+      homeArrow?.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const li = event.target.closest('li');
+        li.classList.toggle('show-submenu');
+      });
+    });
+
+  // Load footer
+  fetch('footer.html')
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('footer-placeholder').innerHTML = data;
+
+      // Subscribe button JS (after footer is loaded)
+      const subscribeBtn = document.getElementById('subscribeButton');
+      const emailInput = document.getElementById('newsletterEmail');
+      const emailError = document.getElementById('emailError');
+
+      subscribeBtn?.addEventListener('click', function(e) {
+        const email = emailInput.value.trim();
+        const valid = /^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+
+        if (valid.test(email)) {
+          // Redirect to 404error.html only if email is valid
+          window.location.href = '404.html';
+        } else {
+          e.preventDefault();
+          emailError.style.display = 'block';
+          emailInput.style.border = '2px solid #ff7a00';
+        }
+      });
+
+      emailInput?.addEventListener('input', function() {
+        emailError.style.display = 'none';
+        emailInput.style.border = 'none';
+      });
+    });
+
+  // Animate service boxes on scroll
+  const serviceBoxes = document.querySelectorAll('.service-box');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((entry, index) => {
+      if(entry.isIntersecting){
+        entry.target.style.animation = `fadeInUp 0.8s forwards`;
+        entry.target.style.animationDelay = `${index * 0.2}s`;
+      }
+    });
+  }, {threshold:0.2});
+  serviceBoxes.forEach(box => observer.observe(box));
+        // === LOADER ===
+        window.addEventListener('load', function() {
+            const loader = document.getElementById('loader');
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                    initScrollAnimations();
+                    initNewsletterValidation();
+                }, 500);
+            }, 1000);
+        });
+
+        // === SCROLL ANIMATIONS (WORKS BOTH UP AND DOWN) ===
+        function initScrollAnimations() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    } else {
+                        // Remove class when element leaves viewport (for re-animation on scroll up)
+                        entry.target.classList.remove('visible');
+                    }
+                });
+            }, { 
+                threshold: 0.1,
+                rootMargin: "0px 0px -50px 0px"
+            });
+
+            // Observe all animated elements
+            document.querySelectorAll('.animate-text, .animate-left, .animate-right, .animate-scale').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // === NEWSLETTER VALIDATION ===
+        function initNewsletterValidation() {
+            const newsletterForm = document.getElementById('newsletterForm');
+            const emailInput = document.getElementById('emailInput');
+            const subscribeBtn = document.getElementById('subscribeBtn');
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+            
+            // Email validation regex
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            
+            // Real-time email validation
+            emailInput.addEventListener('input', function() {
+                const email = this.value.trim();
+                const isValid = emailRegex.test(email);
+                
+                if (email === '') {
+                    this.classList.remove('error', 'success');
+                    errorMessage.style.opacity = '0';
+                } else if (isValid) {
+                    this.classList.remove('error');
+                    this.classList.add('success');
+                    errorMessage.style.opacity = '0';
+                } else {
+                    this.classList.remove('success');
+                    this.classList.add('error');
+                    errorMessage.style.opacity = '0.8';
+                }
+            });
+            
+            // Form submission
+            newsletterForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const email = emailInput.value.trim();
+                const isValid = emailRegex.test(email);
+                
+                if (!isValid) {
+                    // Invalid email - show error
+                    emailInput.classList.add('error');
+                    emailInput.classList.remove('success');
+                    errorMessage.style.opacity = '0.8';
+                    successMessage.style.opacity = '0';
+                    
+                    // Shake animation for error
+                    subscribeBtn.style.animation = 'shake 0.5s ease';
+                    setTimeout(() => {
+                        subscribeBtn.style.animation = '';
+                    }, 500);
+                    
+                    return;
+                }
+                
+                // Valid email - show success and redirect
+                emailInput.classList.remove('error');
+                emailInput.classList.add('success');
+                errorMessage.style.opacity = '0';
+                successMessage.style.opacity = '1';
+                
+                // Disable button and show loading state
+                subscribeBtn.disabled = true;
+                subscribeBtn.classList.add('loading');
+                subscribeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                subscribeBtn.style.cursor = 'not-allowed';
+                
+                // Animate button
+                subscribeBtn.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    subscribeBtn.style.transform = '';
+                }, 150);
+                
+                // Redirect after 1.5 seconds
+                setTimeout(() => {
+                    window.location.href = '404.html';
+                }, 1500);
+            });
+        }
+
+        // === ALL OTHER BUTTONS REDIRECT TO 404.html ===
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add click handlers to all regular buttons (excluding newsletter button)
+            document.querySelectorAll('.btn:not(.newsletter-btn)').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Button animation on click
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                    
+                    // Redirect to 404.html
+                    window.location.href = '404.html';
+                });
+            });
+            
+            // Add hover animation to all buttons
+            document.querySelectorAll('.btn, .newsletter-btn').forEach(btn => {
+                btn.addEventListener('mouseenter', function() {
+                    this.style.transition = 'all 0.3s ease';
+                });
+                
+                btn.addEventListener('mouseleave', function() {
+                    this.style.transition = 'all 0.3s ease';
+                });
+            });
+        });
+
+        // === PARALLAX BACKGROUND EFFECT ===
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const bgGrids = document.querySelectorAll('.bg-grid');
+            
+            bgGrids.forEach(bg => {
+                bg.style.backgroundPosition = `${scrolled * 0.3}px ${scrolled * 0.3}px`;
+            });
+            
+            // Trigger animations for elements coming into view
+            document.querySelectorAll('.animate-text, .animate-left, .animate-right, .animate-scale').forEach(el => {
+                const rect = el.getBoundingClientRect();
+                const isVisible = (
+                    rect.top >= 0 &&
+                    rect.left >= 0 &&
+                    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+                );
+                
+                if (isVisible && !el.classList.contains('visible')) {
+                    el.classList.add('visible');
+                }
+            });
+        });
+
+        // === RESPONSIVE FIXES ===
+        function handleResize() {
+            // Adjust animations for mobile
+            if (window.innerWidth < 768) {
+                document.querySelectorAll('.animate-left, .animate-right').forEach(el => {
+                    el.style.transform = 'translateY(30px)';
+                });
+            }
+        }
+
+        window.addEventListener('resize', handleResize);
+        handleResize(); // Initial call
+    </script>
+</body>
+</html>
